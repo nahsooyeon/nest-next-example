@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { NextPage, NextPageContext } from 'next';
-import { IPost } from '../../../types';
-import PostPreview from '../../../components/post-preview';
-import { BlogService } from '../../../src/blog/blog.service';
+import * as React from "react";
+import { NextPage, NextPageContext } from "next";
+import { IPost } from "../../../types";
+import PostPreview from "../../../components/post-preview";
+import { BlogService } from "../../../server/blog/blog.service";
 
 interface Props {
   posts: IPost[];
@@ -18,7 +18,7 @@ const Blog: NextPage<Props> = ({ posts, source }) => {
           <PostPreview key={post.slug} post={post} />
         ))}
       </div>
-      <div style={{ fontStyle: 'italic', fontSize: 14 }}>
+      <div style={{ fontStyle: "italic", fontSize: 14 }}>
         this page was rendered on the {source}
       </div>
     </div>
@@ -34,14 +34,14 @@ const Blog: NextPage<Props> = ({ posts, source }) => {
 // https://nextjs.org/docs/basic-features/data-fetching#only-runs-on-server-side
 export async function getServerSideProps(ctx: NextPageContext) {
   const props: Props = {
-    source: 'server',
+    source: "server",
     posts: ctx.query.posts as any,
   };
 
   if (!Array.isArray(props.posts)) {
     const service = new BlogService();
     props.posts = service.all();
-    props.source = 'client';
+    props.source = "client";
   }
 
   return { props };

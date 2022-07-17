@@ -1,6 +1,6 @@
-import { NextPage, NextPageContext } from 'next';
-import { IPost } from '../../../types';
-import { BlogService } from '../../../src/blog/blog.service';
+import { NextPage, NextPageContext } from "next";
+import { IPost } from "../../../types";
+import { BlogService } from "../../../server/blog/blog.service";
 
 interface Props {
   post: IPost;
@@ -21,7 +21,7 @@ const Post: NextPage<Props> = ({ post: { title, content }, source }) => {
           <p key={`block-${index}`}>{block}</p>
         ))}
       </div>
-      <div style={{ fontStyle: 'italic', fontSize: 14 }}>
+      <div style={{ fontStyle: "italic", fontSize: 14 }}>
         this page was rendered on the {source}
       </div>
     </div>
@@ -39,14 +39,14 @@ export function getServerSideProps(ctx: NextPageContext) {
   const post = ctx.query.post || null;
 
   const props: SSProps = {
-    source: 'server',
+    source: "server",
     post: post as any,
   };
 
   if (!props.post) {
     const service = new BlogService();
     props.post = service.find(ctx.query.slug as string);
-    props.source = 'client';
+    props.source = "client";
   }
 
   if (props.post === null) {
